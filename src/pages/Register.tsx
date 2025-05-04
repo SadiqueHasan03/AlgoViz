@@ -153,6 +153,7 @@ const Register = () => {
                 Password must be at least 8 characters
               </p>
             </div>
+            <div id="clerk-captcha" data-cl-theme="auto" data-cl-size="normal" data-cl-language="auto" className="mb-4" />
             <Button 
               type="submit" 
               className="w-full bg-algo-primary hover:bg-algo-primary/90 transition-all group"
