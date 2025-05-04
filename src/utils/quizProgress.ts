@@ -1,21 +1,27 @@
 
 import { UserQuizProgress, QuizProgress } from "../types/quiz";
 import { saveQuizProgressToBackend } from "./simulateBackend";
+import { useToast } from "@/hooks/use-toast";
 
 const STORAGE_KEY = "algorithmLearner_quizProgress";
 
 export const saveQuizProgress = async (progress: QuizProgress): Promise<void> => {
-  const currentProgress = getQuizProgressData();
-  
-  const updatedProgress = {
-    ...currentProgress,
-    [progress.quizId]: progress
-  };
-  
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProgress));
-  
-  // Simulate sending to backend
-  await saveQuizProgressToBackend(progress);
+  try {
+    const currentProgress = getQuizProgressData();
+    
+    const updatedProgress = {
+      ...currentProgress,
+      [progress.quizId]: progress
+    };
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProgress));
+    
+    // Save to backend
+    await saveQuizProgressToBackend(progress);
+  } catch (error) {
+    console.error("Error saving progress:", error);
+    throw error;
+  }
 };
 
 export const getQuizProgressData = (): UserQuizProgress => {

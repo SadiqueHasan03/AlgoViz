@@ -120,16 +120,21 @@ const LessonDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching data or find from local array
-    const foundLesson = lessons.find((l) => l.slug === slug);
-    setLesson(foundLesson ? (foundLesson as Lesson) : null);
-    setLoading(false);
-    // In a real app, you might fetch here:
-    // fetch(`/api/lessons/${slug}`)
-    //   .then(res => res.json())
-    //   .then(data => setLesson(data))
-    //   .catch(err => { console.error(err); setLesson(null); })
-    //   .finally(() => setLoading(false));
+    const fetchLesson = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'}/api/lessons/${slug}`);
+        if (!response.ok) throw new Error('Failed to fetch lesson');
+        const data = await response.json();
+        setLesson(data);
+      } catch (error) {
+        console.error("Error fetching lesson:", error);
+        setLesson(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchLesson();
   }, [slug]);
 
   // --- Loading State ---
